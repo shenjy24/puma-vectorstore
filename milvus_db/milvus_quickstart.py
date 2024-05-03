@@ -5,9 +5,9 @@ from pymilvus import (
 
 
 # 获取 client
-def get_client(uri):
+def get_client(uri, db_name):
     # 1. Set up a Milvus client
-    return MilvusClient(uri=uri)
+    return MilvusClient(uri=uri, db_name=db_name)
 
 
 # create a collection
@@ -46,10 +46,9 @@ def query_vector(client, collection, query, limit=3):
 
 if __name__ == '__main__':
     # 获取 client
-    milvus_client = get_client("http://localhost:19530")
-    collection_name = "milvus_col"
+    milvus_client = get_client("http://localhost:19530", "book")
     # 创建 collection
-    # create_collection(milvus_client, "milvus_col")
+    create_collection(milvus_client, "milvus_col")
     # 插入数据
     entities = [
         {"id": 0, "vector": [0.3580376395471989, -0.6023495712049978, 0.18414012509913835, -0.26286205330961354,
@@ -73,10 +72,10 @@ if __name__ == '__main__':
         {"id": 9, "vector": [0.5718280481994695, 0.24070317428066512, -0.3737913482606834, -0.06726932177492717,
                              -0.6980531615588608], "color": "purple_4976"}
     ]
-    insert_data(milvus_client, collection_name, entities)
+    insert_data(milvus_client, "milvus_col", entities)
     # 搜索数据
     query_vec = [
         [0.041732933, 0.013779674, -0.027564144, -0.013061441, 0.009748648]
     ]
-    res = query_vector(milvus_client, collection_name, query_vec)
+    res = query_vector(milvus_client, "milvus_col", query_vec)
     print(res)
